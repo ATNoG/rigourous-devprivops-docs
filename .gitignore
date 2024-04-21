@@ -1,0 +1,6 @@
+**/*.tmp
+**/*.old
+
+/public
+README.md
+LICENSE
