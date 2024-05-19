@@ -6,6 +6,7 @@ insert_anchor_links = "right"
 # Environment Setup
 
 The tool was designed to be developed fully on local and owned FOSS infrastructure, however, it is possible to use any more convenient services by porting configurations.
+We will only guide the setup rpocess through a fully local system.
 
 To setup a fully owned local development environment to work on the tool, one needs:
 
@@ -17,6 +18,7 @@ To setup a fully owned local development environment to work on the tool, one ne
 - a hypervisor
     + a debian 12 VirtualBox VM
 - a docker registry
+    + illustrated with a local registry
 - a git host with support for CI/CD
     + forgejo
 - a CI/CD platform
@@ -26,11 +28,12 @@ Local development dependencies can be all installed at once through `nix` by run
 
 ## 0 Create the Virtual Machine
 
-With the following `Vagrantfile`:
+The local system will use a VirtualBox virtual machine to support the repository and CI/CD pipeline. 
+The virtual machine can be created with the following `Vagrantfile`:
 
 ```Vagrantfile
 Vagrant.configure("2") do |config|
-    config.vm.box = "debian/bookworm64"
+    config.vm.box = "debian/bookworm64" # Using the latest (as of writing) debian release
 
     config.vm.hostname = "vagrant-deb-devprivops"
     config.vm.network "private_network", ip: "192.168.56.1"
@@ -41,23 +44,25 @@ Vagrant.configure("2") do |config|
 
     config.vm.provider "virtualbox" do |vb|
         vb.gui = false
-        vb.memory = "16000"
-        vb.cpus = 6
+        vb.memory = "16000" # Giving it 16GB of RAM by default, change as needed
+        vb.cpus = 6 # Giving 6 CPU cores by default, change as needed 
         vb.name = "vagrant-deb-devprivops"
         check_guest_additions = false
 
-        # make internet work https://serverfault.com/a/496612
         vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-        #vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
     end
 end
 ```
 
-Run `vagrant up`
+To create and/or turn on the virtual machine, run `vagrant up`.
+
+**NOTE**: changing IPs and ports may require changes in later steps, namely when starting containers.
 
 ## 1 Install Docker
 
-Run `vagrant ssh` to enter the VM
+The docker isntallation follows the instructions to install it from the official docker repositories.
+
+Run `vagrant ssh` to enter the VM, then run the following script:
 
 ```sh
 # https://docs.docker.com/engine/install/debian/
@@ -81,11 +86,13 @@ sudo addgroup docker
 sudo adduser vagrant docker
 ```
 
-Log out and back in with `Ctrl + D` and `vagrant ssh`
+Log out and back in with `Ctrl + D` and `vagrant ssh` so the installation takes effect.
 
 ## 2 Install Forgejo
 
-Use the following `docker-compose.yml`
+We use a FOSS self-hosted git host, but any can be used, even if not self hosted.
+
+Use the following `docker-compose.yml`:
 
 ```yml
 # From https://forgejo.org/docs/latest/admin/installation-docker/
@@ -115,14 +122,18 @@ services:
       - '222:22'
 ```
 
-Then `docker compose up -d`
+Then run `docker compose up -d` to start the forgejo container.
 
 After that, from the host, acessing `http://192.168.56.1:8000` will prompt for installation tasks to be done in the browser.
 In the end, it's just clicking `Install Forgejo`.
 
 ## 3 Install DroneCI
 
-Follow instructions as per https://docs.drone.io/server/provider/gitea/
+We use DroneCI as our CI/CD pipeline, however, any other pipeline that supports docker runners can be used.
+
+Follow the instructions detailed in the [official drone documentation](https://docs.drone.io/server/provider/gitea/).
+
+**TODO MAKE THE SECRETS' INTENT MORE CLEAR**
 
 ```sh
 docker run \
@@ -143,7 +154,9 @@ docker run \
 
 ### 3.1 Install runners
 
-Follow instructions as per https://docs.drone.io/runner/docker/installation/linux/ 
+For Drone to be able to use docker runners, one needs to run a specific docker container.
+
+Follow the instructions detailed in the [official drone documentation](https://docs.drone.io/runner/docker/installation/linux/).
 
 ```sh
 docker run --detach \
@@ -161,11 +174,13 @@ docker run --detach \
 
 ## 4 Install Docker Registry
 
+Since the tool's containers are not hosted on dockerhub or any other public docker host, we need to have our own internal registry.
+
 ```sh
 docker run -d -p 5000:5000 --restart=always --name registry registry:2
 ```
 
-Allow insecure registry by adding the following to `/etc/docker/daemon.json`
+Allow insecure registry by adding the following to `/etc/docker/daemon.json`:
 
 ```json
 { 
@@ -174,6 +189,8 @@ Allow insecure registry by adding the following to `/etc/docker/daemon.json`
 ```
 
 ### 4.1 Build golang-fuseki image
+
+This image is the base upon which the tool is tested and packaged.
 
 ```Dockerfile
 # Use official Golang image
@@ -199,9 +216,13 @@ EXPOSE 3030
 CMD ["/opt/fuseki/fuseki-server", "--mem", "--port=3030", "/tmp"]
 ```
 
+To build the image and push it to the repository, we need to run the following commands:
+
 ```sh
 docker build -t golang-fuseki:latest .
 docker tag golang-fuseki:latest 192.168.56.1:5000/golang-fuseki:latest
 docker push 192.168.56.1:5000/golang-fuseki:latest
 ```
+
+At this stage, we can leave the virtual machine and whenever it turns on all containers will be adequately started.
 

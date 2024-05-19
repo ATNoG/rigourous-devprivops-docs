@@ -10,9 +10,9 @@ This page will discuss how the conversion is done, which is important to design 
 
 # Principles of conversion
 
-Each file, whether it encodes an array or object, will always have a root node named `ROOT`.
+Each file will always have a root node named `ROOT`.
 
-Each object is given an identifier, either explicitly with the `id` attribure, or implicitly by incrementing an internal global counter.
+Each object is given an identifier, either explicitly with the `id` attribute, or implicitly by incrementing an internal global counter.
 
 Each property name is a triple's predicate, the identifier of the object with the property is the subject, and the value of the property is the object.
 
@@ -28,8 +28,8 @@ prop: 2
 <http://example.org/ROOT> <http://example.org/prop> 2
 ```
 
-As aluded to before, the object of a triple will be the value of a YAML property.
-When such property is an object, the value wil instead be the id of said object.
+As alluded to before, the object of a triple will be the value of a YAML property.
+When such property is an object, the value will instead be the id of said object.
 
 ```yml
 prop:
@@ -81,8 +81,8 @@ will turn into
 <http://example.org/my_id> <http://example.org/property> "a"
 ```
 
-Notice how the `id` property is not itself turned into a triple, but its value is used as the object's identiier instead.
-Also of note is that identifiers' spaces are internally turned into `_`, however, this has no reprecutions on YAML configurations, only 
+Notice how the `id` property is not itself turned into a triple, but its value is used as the object's identifier instead.
+Also of note is that the identifiers' spaces are turned into `_`, however, this has no repercussions on YAML configurations, only when writing queries.
 
 When a property has an identifier for an object, it can be written with the shorthand format `[abbrev]:id`, where `abbrev` is the optional abbreviation of the URI base of the identifier, and `id` is the identifier.
 
@@ -126,9 +126,9 @@ Notice how `oth` is the prefix for `other.org`.
 
 ## Configuration
 
-A system can have certain variables that are configurable, especially when the system is to be exported to third parties as a component of other systems.
+A system can have certain variables that are configurable, especially useful when the system is to be exported to third parties as a component of other systems.
 
-Configurations are stored in the `config` directory and are yaml files which contain all the variables that can be changes on system installation.
+Configurations are stored in the `config` directory and are YAML files which contain all the variables that can be changed on system installation.
 Each file contains a possible configuration in full.
 The configuration itself is a list of variable identifiers and their respective values.
 

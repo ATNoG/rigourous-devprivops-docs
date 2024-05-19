@@ -14,7 +14,7 @@ The syntax of the attack tree is as foolows:
 ```yml
 - description: Node description
   query: attack_trees/queries/query_file.rq
-  children: [] # list of other nodes, here depicted empty for better readability
+  children: [] # list of nodes, here depicted empty for better readability
 ```
 
 ## Processing
@@ -27,4 +27,6 @@ A node can be in one of the following states:
 - `NOT_POSSIBLE`: When the node has been executed and its condition was determined to not occur
 - `POSSIBLE`: When the node has been executed and its condition was determined to occur
 - `ERROR`: When the node's execution failed
+
+If the root node has state `POSSIBLE`, the attack is deemed possible and reported to the user. 
 

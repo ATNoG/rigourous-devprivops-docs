@@ -5,13 +5,16 @@ insert_anchor_links = "right"
 
 # File Structure
 
-This article explains how files are organized within the file system.
+In this page we explain how files are organized within the file system.
 
-The tool reads from 2 directories: a global one (`/etc/devprivops/`) and a local one (`.devprivops/`).
+The tool reads from 2 directories: a global one (by default `/etc/devprivops/`) and a local one (by default `.devprivops/`).
+These can be changed by passing the desired directory to the options `--global-dir` and `--local-dir`
 
-The global directory should only have queries and description schemas that come from outside sources, like third party vendors and regulatory authorities, 
-while the local directory should contain the system descriptions and company policies and schemas.
+The global directory, by convention, should only have queries and description schemas that come from outside sources, like third party vendors and regulatory authorities, 
+while the local directory should contain the system descriptions, company policies and schemas.
 This makes it more difficult for developers to change policies and schemas from trusted third parties unnoticed, while providing ease of expansion and better isolation of the parts that concern company policy.
+
+It is encouraged to package a docker container with the tool and global directory, so that it is easier to update every developer's and pipeline's global directories.
 
 ## File lokup strategy
 
@@ -30,10 +33,10 @@ devprivops/
 ├── descriptions        # All system descriptions
 ├── reasoner            # The reasoner rules
 ├── regulations         # All regulations
-│   ├── some_reg        # The rules of the regulation `some_reg`
-│   │   ├── consistency # The consistency rules, as queries, of the regulation
-│   │   ├── policies    # The policy rules, as queries, of the regulation
-│   │   └── policies.yml# The metadata for all policies, of concistency or otherwise
+│   └── some_reg        # The rules of the regulation `some_reg`
+│       ├── consistency # The consistency rules, as queries, of the regulation
+│       ├── policies    # The policy rules, as queries, of the regulation
+│       └── policies.yml# The metadata for all policies, of concistency or otherwise
 ├── report_data         # The arbitrary data to be included in the report
 │   └── report_data.yml # The metadata of each query that fetches arbitrary data, 
 │                       #     queries can be put wherever desired

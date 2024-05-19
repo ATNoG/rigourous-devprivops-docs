@@ -12,7 +12,7 @@ In this page, we explain which special files exist and their schemas.
 The attack tree description files contain each one attack/harm tree.
 These trees are composed of nodes that are only tested if at least one of its children is possible, or it has no children.
 
-A node is composed like this:
+A node follows the following structure:
 
 ```yml
 - description: Node description
@@ -22,19 +22,19 @@ A node is composed like this:
 
 ## Configurations
 
-The `config` directory contains multiple configuration files that isntantiate the system's configurable variables.
+The `config` directory contains multiple configuration files that instantiate the system's configurable variables.
 
 This file has **no schema**, all of the values are free form and cannot be checked by schemas.
-Adding schemas to this would create a very complex schema management workflow that would get in the way of architecture design.
+Adding schemas to this file would create a very complex multi-file schema management workflow that would get in the way of architecture design.
 
 The file itself is an array of values
 
 ```yml
-- id: pref:variable id
+- id: prefix:variable id
   value: some value
 ```
 
-The `id` field should use a prefix different from the configuration default, as using the default could create conflicts between different vendors.
+The `id` field should use a prefix different from the configuration default, as using the default could create conflicts between different vendors' variables, should they have the same name.
 
 ## Regulation Policies
 
@@ -49,9 +49,11 @@ A policy file is an array of policy descriptions
   mapping message: A message telling the developer how to deal with the results of this rule
 ```
 
+Consistency policies are those that ensure the configuration does not contradict itself and that the values are within their respective domains.
+
 ## Extra Data File
 
-The `report_data/report_data.yml` file contains a list of descriptions of queries that add extra information to the report.
+The `report_data/report_data.yml` file contains a list of metadata of queries that add extra information to the report.
 
 ```yml
 - url: some.id # The identifier of where the data will be inserted in the report visualizer
@@ -60,6 +62,8 @@ The `report_data/report_data.yml` file contains a list of descriptions of querie
   description: A more lenghty description to be displayed below the heading
   data row line: ""
 ```
+
+The `url` value shall be provided by the specific visualizer, as it is the responsible for organizing the information.
 
 ## Requirements
 
@@ -79,7 +83,7 @@ The use case can be a misuse case, meaning that we do not want it to be possible
 
 ## Test List
 
-The list of test scenarios and tests is kept in the `tests.spec.json` file.
+The list of test scenarios and tests is kept in the `tests/spec.json` file.
 
 ```json
 [

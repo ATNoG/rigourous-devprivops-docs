@@ -5,7 +5,7 @@ insert_anchor_links = "right"
 
 # Test
 
-The test command will run every test for each test case scenario
+The test command will run every test for each test scenario.
 
 ## Parameters
 
@@ -21,9 +21,9 @@ A test scenario consists of a system configuration, not related to the actual sy
 Within each test case, the specified queries are executed and the result compared to the expected result for the test case.
 In the case there is a mismatch, the test fails.
 
-The schemas used are the global ones, the regex match works the same way it does for an ordinary system analysis.
+The schemas used are the global ones, the uri regex match works the same way it does for an ordinary system analysis.
 
-Tests require a triple store available.
+Test execution require an accessible Fuseki triple store.
 
 The triple store is cleaned at the start of the program execution and in the end of each test scenario run, ensuring each scenario is independent from each other.
 

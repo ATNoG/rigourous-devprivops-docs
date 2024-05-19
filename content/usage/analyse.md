@@ -5,7 +5,7 @@ insert_anchor_links = "right"
 
 # Analyse
 
-This command will run the full system analysis, produce a report, and optuionally send it to a server if specified. The report is generated in JSON format, to `report.json`.
+This command will run the full system analysis, produce a report, and optionally send it to a server, if its endpoint is specified. The report is generated in JSON format, to `report_<configuration name>.json`.
 
 ## Parameters
 
