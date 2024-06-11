@@ -8,7 +8,7 @@ insert_anchor_links = "right"
 The tool was designed to be developed fully on local and owned FOSS infrastructure, however, it is possible to use any more convenient services by porting configurations.
 We will only guide the setup rpocess through a fully local system.
 
-To setup a fully owned local development environment to work on the tool, one needs:
+To setup a fully owned local development environment to work on the tool, we need:
 
 - local development dependencies
     + go
@@ -24,11 +24,15 @@ To setup a fully owned local development environment to work on the tool, one ne
 - a CI/CD platform
     + DroneCI with docker runner
 
-Local development dependencies can be all installed at once through `nix` by running `nix shell` on the repository's root directory.
+The choice of debian 12, VirtualBox forgejo and DroneCI can be changed, however, we do provide instructions for these software artifacts.
+
+Local development dependencies can be all installed at once through `nix` by running `nix-shell` on the repository's root directory.
 
 ## 0 Create the Virtual Machine
 
-The local system will use a VirtualBox virtual machine to support the repository and CI/CD pipeline. 
+The choices of Vagrant and VirtualBox are optional.
+
+The local system will use a VirtualBox virtual machine to support the git repository, docker repository and CI/CD pipeline. 
 The virtual machine can be created with the following `Vagrantfile`:
 
 ```Vagrantfile
@@ -56,13 +60,13 @@ end
 
 To create and/or turn on the virtual machine, run `vagrant up`.
 
-**NOTE**: changing IPs and ports may require changes in later steps, namely when starting containers.
+**NOTE**: changing IPs and ports in the `Vagrantfile` may require changes in later steps, namely when starting containers.
 
 ## 1 Install Docker
 
 The docker isntallation follows the instructions to install it from the official docker repositories.
 
-Run `vagrant ssh` to enter the VM, then run the following script:
+Run `vagrant ssh` to enter the VM, then install Docker as per the [official instructions](https://docs.docker.com/engine/install/debian/):
 
 ```sh
 # https://docs.docker.com/engine/install/debian/
@@ -122,9 +126,9 @@ services:
       - '222:22'
 ```
 
-Then run `docker compose up -d` to start the forgejo container.
+Then run `docker compose up -d` to start the forgejo container in the background.
 
-After that, from the host, acessing `http://192.168.56.1:8000` will prompt for installation tasks to be done in the browser.
+After that, from the host, acessing `http://192.168.56.1:3000` will prompt for installation tasks to be done in the browser.
 In the end, it's just clicking `Install Forgejo`.
 
 ## 3 Install DroneCI
@@ -138,10 +142,10 @@ Follow the instructions detailed in the [official drone documentation](https://d
 ```sh
 docker run \
 	--volume=/var/lib/drone:/data \
-	--env=DRONE_GITEA_SERVER=http://192.168.56.1:8000 \
-	--env=DRONE_GITEA_CLIENT_ID=f6e729b8-24ee-427a-9c7c-76cf9c52d67c \
-	--env=DRONE_GITEA_CLIENT_SECRET=gto_qg62xdvrz54t45n2gc2irddfcujho2rbkctupqunivszbbg4mclq \
-	--env=DRONE_RPC_SECRET=7ceed18af2b05f94977c88f3d4f48550 \
+	--env=DRONE_GITEA_SERVER=http://192.168.56.1:3000 \
+	--env=DRONE_GITEA_CLIENT_ID='<forgejo application id>' \
+	--env=DRONE_GITEA_CLIENT_SECRET='<forgejo application secret>' \
+	--env=DRONE_RPC_SECRET='<arbitrary secret>'  \
 	--env=DRONE_SERVER_HOST=192.168.56.1:8080 \
 	--env=DRONE_SERVER_PROTO=http \
 	--publish=8080:80 \
@@ -180,7 +184,7 @@ Since the tool's containers are not hosted on dockerhub or any other public dock
 docker run -d -p 5000:5000 --restart=always --name registry registry:2
 ```
 
-Allow insecure registry by adding the following to `/etc/docker/daemon.json`:
+Allow insecure registries by adding the following to `/etc/docker/daemon.json`:
 
 ```json
 { 

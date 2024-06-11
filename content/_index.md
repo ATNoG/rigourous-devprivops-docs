@@ -5,9 +5,9 @@ insert_anchor_links = "right"
 
 # DevPrivOps
 
-This tool assists in architecture design by validating the architecture against a set of rules.
+This tool assists in system design by validating the architecture against a set of rules.
 
-The architecture is described by various **YAML files**, that might be associated with **JSON schemas**, and validated with **SparQL queries**.
+The architecture is described by various **YAML files**, that are associated with **JSON schemas**, and validated with **SparQL queries**.
 
 Users can specify their own schemas and map them to any actual description files.
 

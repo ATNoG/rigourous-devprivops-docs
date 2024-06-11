@@ -27,6 +27,8 @@ To run the tool locally with docker containers, we can use bind mounts when star
 docker run -d --name devprivops -v "<host directory>:/<container directory>/:ro" devprivops
 ```
 
+where `host directory` is where the tool files are located. By convention, it should be the local directory.
+
 And then when running commands from the host, simply run
 
 ```sh
@@ -37,7 +39,7 @@ This will give access to the configuration directories in the host to the contai
 
 # Pipeline
 
-To run the tool in a pipeline, the docker container is advised.
+To run the tool in a CI/CD pipeline, we can use the docker container.
 
 It must reside in an accessible registry (as it is not hosted on dockerhub).
 
