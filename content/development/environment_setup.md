@@ -38,6 +38,13 @@ The virtual machine can be created with the following `Vagrantfile`:
 ```Vagrantfile
 Vagrant.configure("2") do |config|
     config.vm.box = "debian/bookworm64" # Using the latest (as of writing) debian release
+    config.vm.hostname = "vagrant-deb-devprivops"
+
+    unless Vagrant.has_plugin?("vagrant-disksize")
+        raise  Vagrant::Errors::VagrantError.new, "vagrant-disksize plugin is missing. Please install it using 'vagrant plugin install vagrant-disksize' and rerun 'vagrant up'"
+    end
+
+    config.disksize.size = '30GB'
 
     config.vm.hostname = "vagrant-deb-devprivops"
     config.vm.network "private_network", ip: "192.168.56.1"
@@ -122,13 +129,13 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
-      - '3000:3000'
-      - '222:22'
+      - '8000:3000'
+      - '8022:22'
 ```
 
 Then run `docker compose up -d` to start the forgejo container in the background.
 
-After that, from the host, acessing `http://192.168.56.1:3000` will prompt for installation tasks to be done in the browser.
+After that, from the host, acessing `http://192.168.56.1:8000` will prompt for installation tasks to be done in the browser.
 In the end, it's just clicking `Install Forgejo`.
 
 ## 3 Install DroneCI
@@ -137,23 +144,21 @@ We use DroneCI as our CI/CD pipeline, however, any other pipeline that supports 
 
 Follow the instructions detailed in the [official drone documentation](https://docs.drone.io/server/provider/gitea/).
 
-**TODO MAKE THE SECRETS' INTENT MORE CLEAR**
-
 ```sh
-docker run \
-	--volume=/var/lib/drone:/data \
-	--env=DRONE_GITEA_SERVER=http://192.168.56.1:3000 \
-	--env=DRONE_GITEA_CLIENT_ID='<forgejo application id>' \
-	--env=DRONE_GITEA_CLIENT_SECRET='<forgejo application secret>' \
-	--env=DRONE_RPC_SECRET='<arbitrary secret>'  \
-	--env=DRONE_SERVER_HOST=192.168.56.1:8080 \
-	--env=DRONE_SERVER_PROTO=http \
-	--publish=8080:80 \
-	--publish=443:443 \
-	--restart=always \
-	--detach=true \
-	--name=drone \
-	drone/drone:2
+docker run \ 
+	--volume=/var/lib/drone:/data \ 
+	--env=DRONE_GITEA_SERVER=http://192.168.56.1:8000 \ 
+	--env=DRONE_GITEA_CLIENT_ID='<forgejo application id>' \ 
+	--env=DRONE_GITEA_CLIENT_SECRET='<forgejo application secret>' \ 
+	--env=DRONE_RPC_SECRET='<arbitrary secret>'  \ 
+	--env=DRONE_SERVER_HOST=192.168.56.1:8080 \ 
+	--env=DRONE_SERVER_PROTO=http \ 
+	--publish=8080:80 \ 
+	--publish=443:443 \ 
+	--restart=always \ 
+	--detach=true \ 
+	--name=drone \ 
+	drone/drone:2 
 ```
 
 ### 3.1 Install runners
@@ -163,17 +168,17 @@ For Drone to be able to use docker runners, one needs to run a specific docker c
 Follow the instructions detailed in the [official drone documentation](https://docs.drone.io/runner/docker/installation/linux/).
 
 ```sh
-docker run --detach \
-  --volume=/var/run/docker.sock:/var/run/docker.sock \
-  --env=DRONE_RPC_PROTO=http \
-  --env=DRONE_RPC_HOST=192.168.56.1:8080 \
-  --env=DRONE_RPC_SECRET=7ceed18af2b05f94977c88f3d4f48550 \
-  --env=DRONE_RUNNER_CAPACITY=1 \
-  --env=DRONE_RUNNER_NAME=docker-runner \
-  --publish=3000:3000 \
-  --restart=always \
-  --name=runner \
-  drone/drone-runner-docker:1
+docker run --detach \ 
+  --volume=/var/run/docker.sock:/var/run/docker.sock \ 
+  --env=DRONE_RPC_PROTO=http \ 
+  --env=DRONE_RPC_HOST=192.168.56.1:8080 \ 
+  --env=DRONE_RPC_SECRET='<arbitrary secret>' \ 
+  --env=DRONE_RUNNER_CAPACITY=1 \ 
+  --env=DRONE_RUNNER_NAME=docker-runner \ 
+  --publish=3000:3000 \ 
+  --restart=always \ 
+  --name=runner \ 
+  drone/drone-runner-docker:1 
 ```
 
 ## 4 Install Docker Registry
@@ -192,9 +197,12 @@ Allow insecure registries by adding the following to `/etc/docker/daemon.json`:
 }
 ```
 
+Replace `host` and `port` with the registry's host and port.
+
 ### 4.1 Build golang-fuseki image
 
 This image is the base upon which the tool is tested and packaged.
+Be aware that the fuseki version might change with time, please verify the version prior to making the image.
 
 ```Dockerfile
 # Use official Golang image
@@ -208,10 +216,10 @@ RUN apt update -y && apt install -y \
 
 # Download and install Apache Jena Fuseki
 WORKDIR /opt
-RUN wget https://dlcdn.apache.org/jena/binaries/apache-jena-fuseki-5.0.0.tar.gz && \
-    tar xzf apache-jena-fuseki-5.0.0.tar.gz && \
-    rm apache-jena-fuseki-5.0.0.tar.gz && \
-    mv apache-jena-fuseki-5.0.0 fuseki
+RUN wget https://dlcdn.apache.org/jena/binaries/apache-jena-fuseki-5.1.0.tar.gz && \
+    tar xzf apache-jena-fuseki-5.1.0.tar.gz && \
+    rm apache-jena-fuseki-5.1.0.tar.gz && \
+    mv apache-jena-fuseki-5.1.0 fuseki
 
 # Expose the Fuseki port
 EXPOSE 3030
@@ -229,4 +237,3 @@ docker push 192.168.56.1:5000/golang-fuseki:latest
 ```
 
 At this stage, we can leave the virtual machine and whenever it turns on all containers will be adequately started.
-
