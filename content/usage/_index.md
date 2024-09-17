@@ -1,5 +1,5 @@
 +++
-title = "Commands"
+title = "Usage"
 insert_anchor_links = "right"
 +++
 

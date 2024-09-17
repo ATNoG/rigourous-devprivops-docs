@@ -7,7 +7,7 @@ insert_anchor_links = "right"
 
 This tool assists in system design by ensuring the system abides by privacy regulations.
 
-This way, provided an accurate description, the system is ensured to follow privacy by design, as it is encoded in its architecture. 
+This way, provided an accurate description, the system is ensured to follow privacy by design, since the architecture is itself compliant with privacy law.
 
 The tool can ensure regulations and requirements are met while attacks are impossible.
 
@@ -26,7 +26,10 @@ It is a demonstrative visualizer, not intended for use by everyone, but to showc
     + Impose access control based on clearence level and user group
     + Convert the report into PDF
 - **A web UI interface for the tool**<br>
-This web UI makes the tool more accessible to non technical users by abstracting 
+This web UI makes the tool more accessible to non technical users by abstracting the file edition.
+    + Custom interfaces for file edition
+    + Seamless colaboration and conflict resolution
+    + User friendly interface with tool functions
 - **This documentation website**<br>
 The site serves as both documentation and advertisement for the tool
 
