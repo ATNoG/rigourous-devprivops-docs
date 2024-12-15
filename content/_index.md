@@ -3,9 +3,9 @@ title = "DevPrivOps"
 insert_anchor_links = "right"
 +++
 
-# DevPrivOps
+# PrivGuide
 
-This tool assists in system design by ensuring the system abides by privacy regulations.
+PrivGuide assists in system design by ensuring the system abides by privacy regulations.
 
 This way, provided an accurate description, the system is ensured to follow privacy by design, since the architecture is itself compliant with privacy law.
 
