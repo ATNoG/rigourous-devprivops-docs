@@ -7,22 +7,24 @@ insert_anchor_links = "right"
 
 In this page we explain how files are organized within the file system.
 
-The tool reads from 2 directories: a global one (by default `/etc/devprivops/`) and a local one (by default `.devprivops/`).
-These can be changed by passing the desired directory to the options `--global-dir` and `--local-dir`
+PrivGuide reads from 2 directories: a global one (by default `/etc/devprivops/`) and a local one (by default `.devprivops/`).
+These can be changed by passing the desired directory to the options `--global-dir` and `--local-dir` respectively.
 
 The global directory, by convention, should only have queries and description schemas that come from outside sources, like third party vendors and regulatory authorities, 
 while the local directory should contain the system descriptions, company policies and schemas.
-This makes it more difficult for developers to change policies and schemas from trusted third parties unnoticed, while providing ease of expansion and better isolation of the parts that concern company policy.
-
-It is encouraged to package a docker container with the tool and global directory, so that it is easier to update every developer's and pipeline's global directories.
+This makes it more difficult for developers to change policies and schemas from trusted third parties unnoticed, while providing ease of modification and better isolation of the parts that concern company policy.
 
 ## File lokup strategy
 
-Files on the local directory override those on the global one.
+PrivGuide will first look for files in the local directory.
+If the file cannot be found there, then it will search the global directory.
+This makes it so that files on the local directory override those on the global directory.
+
+If no global directory is specified, PrivGuide will still work, but everything it needs must be on the local directory.
 
 ## Abstract File Tree
 
-The abstract file tree is the view the program has of both the global and local directories combined.
+The abstract file tree is the view the program has of both the global and local directories combined, according to the previously outlined rules.
 
 ```
 devprivops/

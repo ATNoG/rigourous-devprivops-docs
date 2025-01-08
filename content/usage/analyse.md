@@ -9,15 +9,15 @@ This command will run the full system analysis, produce a report, and optionally
 
 ## Parameters
 
-- `user`: The username for authentication
-- `pass`: The password for authentication
+- `user`: The username for the triple store
+- `pass`: The password for the triple store
 - `ip`: The triple store's IP
 - `port`: The triple store's port
-- `dataset`: The dataset within the triple store to use
+- `dataset`: The dataset within the triple store to use. It will be cleaned before and after execution 
 
 ### Optional flags
 
-- `--report-endpoint`: The HTTP endpoint to send the report to after the processing. If none is specified, it is not sent
+- `--report-endpoint`: The HTTP endpoint to send the report to after the processing. If none is specified, the report is not sent anywhere
 - `--pipeline`: Whether to format the output for pipeline usage, that is, with date and time of execution and no colors.
 - `--global-dir`: The path to the global directory. By default it is `/etc/devprivops`
 - `--local-dir`: The path to the local directory. By default it is `.devprivops`
@@ -37,4 +37,3 @@ This is the rough analysis flow, for the complete flow please refer to the paper
 0. (OPTIONAL) Send the report to the site
 
 The triple store is cleaned before and after the execution of the command.
-

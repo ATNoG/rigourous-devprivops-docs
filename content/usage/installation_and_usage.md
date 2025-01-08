@@ -3,28 +3,27 @@ title = "Installation"
 insert_anchor_links = "right"
 +++
 
-In this page, we discuss how to install and use the tool in some scenarios.
+In this page, we discuss how to install and use PrivGuide in some common scenarios.
 
 # Native
 
-The tool can be isntalled nativelly by compiling the source code.
-To do this, it is needed to install the dependencies in the `shell.nix`, either through `nix` itself, or by procedurally installing them through other means.
+The tool can be installed nativelly by compiling the source code.
+To do this, install the dependencies in `shell.nix`, either through `nix` itself (`nix-shell --extra-experimental-features "flakes"`), or by procedurally installing them through other means.
 
-Then, to have the binary, we simply need to run `go build`.
+Then, to compile the binary, run `go build`.
 
-To execute the tool, run `./devprivops <args>` or place the binary in a directory in `$PATH`.
+To execute PrivGuide, run `./devprivops <args>` or place the binary in a directory in `$PATH`.
 
-**NOTE**: this aproach requires an instance of Apache Jena Fuseki to be set up and accessible.
+**NOTE**: this aproach requires an instance of Apache Jena Fuseki to be set up and accessible, which is not covered in this guide.
 
 # Local Docker Container
 
-The tool can be executed from a local docker conatainer.
-The container we provide already has a working Fuseki instance exposed on port 3030, without user or password, and a dataset called `tmp`.
-
-To run the tool locally with docker containers, we can use bind mounts when starting the container
+PrivGuide can be executed from a local docker conatainer.
+The provided container already has a working Fuseki instance exposed on port 3030, without user or password, and a dataset called `tmp`.
+Bind mounts are used to pass the files that PrivGuide needs to analyse.
 
 ```sh
-docker run -d --name devprivops -v "<host directory>:/<container directory>/:ro" devprivops
+docker run -d --name privguide -v "<host directory>:/<container directory>/:ro" privguide
 ```
 
 where `host directory` is where the tool files are located. By convention, it should be the local directory.
@@ -32,7 +31,7 @@ where `host directory` is where the tool files are located. By convention, it sh
 And then when running commands from the host, simply run
 
 ```sh
-docker exec devprivops devprivops test user pass 127.0.0.1 3030 tmp --local-dir <container direcotry>
+docker exec privguide devprivops test user pass 127.0.0.1 3030 tmp --local-dir <container direcotry>
 ```
 
 This will give access to the configuration directories in the host to the container.

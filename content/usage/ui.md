@@ -25,7 +25,7 @@ The UI can be deployed either through the docker container or as a native binary
 
 ## Docker Container
 
-To use the docker container, we run the following command
+The container can be deployed through the following command:
 
 ```sh
 docker run \ 
@@ -53,7 +53,7 @@ To manually compile the UI and execute it:
 
 While developing, we provide a configuration for [air](https://github.com/air-verse/air) that not only reloads the go code, but also the templates and styles.
 
-To turn on the air server, run `air .` on the repository's root.
+To turn on the air server, run `air` on the repository's root.
 Then, whenever files change the tool will automatically be rerun and ready to test.
 
 For better dependency management, we provide a `shell.nix` file with all needed dependencies.
@@ -70,12 +70,6 @@ This interface allows to:
 - Use custom visualizers for groups of descriptions;
 - Run analysis and tests;
 
-# Usage
-
-...
-
-## Description Visualizers
+# Description Visualizers
 
 Visualizers are WASM binaries that recieve the description and changes the DOM to provide the visualization.
-
-<!--The binaries are put in the -->

@@ -5,8 +5,8 @@ insert_anchor_links = "right"
 
 # Summary
 
-As discussed in the Architecture page, this tool stores data from **YAML files** into a **triple store**.
-This page will discuss how the conversion is done, which is important to design descriptions and queries that effectively encode and reason with the architecture.
+As discussed in the [Architecture page](@/internals/architecture.md), PrivGuide stores data from **YAML files** into a **triple store**.
+This page will discuss how the conversion is done, which is important to design descriptions and queries that effectively encode and reason with the system descriptions.
 
 # Principles of conversion
 
@@ -84,7 +84,7 @@ will turn into
 Notice how the `id` property is not itself turned into a triple, but its value is used as the object's identifier instead.
 Also of note is that the identifiers' spaces are turned into `_`, however, this has no repercussions on YAML configurations, only when writing queries.
 
-When a property has an identifier for an object, it can be written with the shorthand format `[abbrev]:id`, where `abbrev` is the optional abbreviation of the URI base of the identifier, and `id` is the identifier.
+When a property has an identifier of an object, it can be written with the shorthand format `[abbrev]:id`, where `abbrev` is the optional abbreviation of the URI base of the identifier, and `id` is the identifier.
 
 ```yml
 objs1:
