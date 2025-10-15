@@ -6,7 +6,7 @@ insert_anchor_links = "right"
 # Environment Setup
 
 The tool was designed to be developed fully on local and owned FOSS infrastructure, however, it is possible to use any more convenient services by porting configurations.
-We will only guide the setup rpocess through a fully local system.
+We will only guide the setup process through a fully local system.
 
 To setup a fully owned local development environment to work on the tool, we need:
 

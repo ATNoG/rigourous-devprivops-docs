@@ -7,7 +7,7 @@ insert_anchor_links = "right"
 
 PrivGuide assists in system design by ensuring the system abides by privacy regulations.
 
-This way, provided an accurate description, the system is ensured to follow privacy by design, since the architecture is itself compliant with privacy law.
+This way, provided an accurate description, the system is ensured to follow privacy by design, since the architecture is itself compliant with privacy laws.
 
 The tool can ensure regulations and requirements are met while attacks are impossible.
 
