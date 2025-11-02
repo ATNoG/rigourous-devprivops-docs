@@ -113,4 +113,3 @@ The `uris.yml` file is a list of URI base metadata.
   files: # List of REGEX expressions that should match the files that use it as a default base
     - .*\.abrev\.yml
 ```
-

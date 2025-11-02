@@ -31,7 +31,7 @@ where `host directory` is where the tool files are located. By convention, it sh
 And then when running commands from the host, simply run
 
 ```sh
-docker exec privguide devprivops test user pass 127.0.0.1 3030 tmp --local-dir <container direcotry>
+docker exec privguide devprivops test user pass 127.0.0.1 3030 tmp --local-dir <container directory>
 ```
 
 This will give access to the configuration directories in the host to the container.
@@ -43,4 +43,3 @@ To run the tool in a CI/CD pipeline, we can use the docker container.
 It must reside in an accessible registry (as it is not hosted on dockerhub).
 
 The first action to take is to start the Fuseki instance, then the commands can be executed as if the tool was natively installed.
-

@@ -136,4 +136,3 @@ When exporting the system to be integrated within others, 2 things must be provi
 
 1. the list of configuration variables
 2. queries that attest the validity of the configuration and provide scores based on it
-

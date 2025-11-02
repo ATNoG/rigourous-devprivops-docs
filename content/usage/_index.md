@@ -24,5 +24,5 @@ docker run -d --name privguide -v "<host directory>:/<container directory>/:ro" 
 PrivGuide can then be executed through `docker exec`:
 
 ```sh
-docker exec privguide privguide test user pass 127.0.0.1 3030 tmp --local-dir <container direcotry>
+docker exec privguide privguide test user pass 127.0.0.1 3030 tmp --local-dir <container directory>
 ```

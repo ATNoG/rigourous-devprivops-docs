@@ -22,5 +22,3 @@ This endpoint allows to edit the description's original file in YAML format.
 It also provides a visual representation of the description, if a WASM plugin supports this description schema.
 
 It also provides means of changing the description's default URI, both to an existing one and a new one.
-
-

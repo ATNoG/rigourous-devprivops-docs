@@ -11,4 +11,3 @@ PrivGuide can be deployed locally or on a CI/CD pipeline, as depicted in the fol
 
 ![Deployment in a CI/CD pipeline](/deploy_diag_pipeline.png)
 ![Deployment in a local machine](/deploy_diag_local.png)
-

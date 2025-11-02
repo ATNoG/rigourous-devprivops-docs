@@ -15,4 +15,3 @@ Changes to them would render the program unusable, as, unlike descriptions, the 
 ## Parameters
 
 - `schema`: the schema to print, one of `attack-tree`, `query`, `report` or `requirement`
-
